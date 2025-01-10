@@ -1,21 +1,34 @@
-document.getElementById('searchButton').addEventListener('click', async () => {
-    const departure = document.getElementById('departure_airport').value;
-    const arrival = document.getElementById('arrival_airport').value;
-    const date = document.getElementById('flight_date').value;
-    const time = document.getElementById('start_time').value;
+// Funzione per caricare gli aeroporti dal server e popolare i menù a tendina
+async function loadAirports() {
+    try {
+        const response = await fetch('/airports');
+        const airports = await response.json();
 
-    // Invio dei dati al server
-    const response = await fetch('/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ departure, arrival, date, time })
-    });
+        // Trova i menù a tendina per partenza e arrivo
+        const departureSelect = document.getElementById('departure_airport');
+        const arrivalSelect = document.getElementById('arrival_airport');
 
-    const flights = await response.json();
+        // Pulisci i menù a tendina
+        departureSelect.innerHTML = '';
+        arrivalSelect.innerHTML = '';
 
-    // Mostra i risultati
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = flights.length
-        ? flights.map(f => `<p>${f.departure_time} - ${f.arrival_time}: ${f.departure_airport} -> ${f.arrival_airport}</p>`).join('')
-        : '<p>Nessun volo trovato.</p>';
-});
+        // Aggiungi le opzioni basate sugli aeroporti
+        airports.forEach(airport => {
+            const departureOption = document.createElement('option');
+            departureOption.value = airport;
+            departureOption.textContent = airport;
+
+            const arrivalOption = document.createElement('option');
+            arrivalOption.value = airport;
+            arrivalOption.textContent = airport;
+
+            departureSelect.appendChild(departureOption);
+            arrivalSelect.appendChild(arrivalOption);
+        });
+    } catch (error) {
+        console.error('Errore durante il caricamento degli aeroporti:', error);
+    }
+}
+
+// Chiama la funzione al caricamento della pagina
+document.addEventListener('DOMContentLoaded', loadAirports);

@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ricerca Voli</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <title>Cerca Voli</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Cerca un Volo</h1>
-    <form id="searchForm">
-        <label for="departure_airport">Aeroporto di Partenza:</label>
+    <h1>Ricerca Voli</h1>
+
+    <form id="flightSearchForm">
+        <label for="departure_airport">Aeroporto di Partenza</label>
         <select id="departure_airport" required>
-            <option value="FCO">Roma Fiumicino</option>
-            <option value="MXP">Milano Malpensa</option>
-        </select><br><br>
-        <label for="arrival_airport">Aeroporto di Arrivo:</label>
+            <option value="" disabled selected>Caricamento...</option>
+        </select>
+
+        <label for="arrival_airport">Aeroporto di Arrivo</label>
         <select id="arrival_airport" required>
-            <option value="JFK">New York JFK</option>
-            <option value="LHR">Londra Heathrow</option>
-        </select><br><br>
-        <label for="flight_date">Data del Volo:</label>
-        <input type="date" id="flight_date" required><br><br>
-        <label for="start_time">Ora di Partenza dalle:</label>
-        <input type="time" id="start_time" required><br><br>
-        <button type="button" id="searchButton">Cerca</button>
+            <option value="" disabled selected>Caricamento...</option>
+        </select>
+
+        <label for="flight_date">Data</label>
+        <input type="date" id="flight_date" required>
+
+        <label for="departure_time">Orario di Partenza (opzionale)</label>
+        <input type="time" id="departure_time">
+
+        <button type="submit">Cerca Voli</button>
     </form>
-    <div id="results"></div>
-    <script src="/static/script.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
