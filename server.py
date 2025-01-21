@@ -1,11 +1,12 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import sqlite3
 import json
+import os
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/airports":
-            # Collegamento al database
+            # Collegamento al database (ora cerca nella cartella principale)
             conn = sqlite3.connect('database/flights.db')
             cursor = conn.cursor()
 
@@ -24,18 +25,22 @@ class MyServer(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps(airports).encode())
+
         else:
-            # Gestione file statici
+            # Gestione file statici (corretto il percorso per templates/)
             try:
                 if self.path == "/":
                     self.path = "/index.html"
-                file_to_open = open("static" + self.path).read()
+                file_path = os.path.join(os.path.dirname(__file__), "templates", self.path[1:])
+                with open(file_path, "r", encoding="utf-8") as file:
+                    file_to_open = file.read()
                 self.send_response(200)
-            except:
+            except FileNotFoundError:
                 file_to_open = "File non trovato"
                 self.send_response(404)
+
             self.end_headers()
-            self.wfile.write(bytes(file_to_open, "utf-8"))
+            self.wfile.write(file_to_open.encode("utf-8"))
 
 if __name__ == "__main__":
     server = HTTPServer(("localhost", 8000), MyServer)
